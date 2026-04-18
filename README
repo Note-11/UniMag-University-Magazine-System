@@ -1,3 +1,6 @@
+This is the University Magazine system.
+The system allows users with secure roles.
+
 The system uses a .env file for email configuration. As per security concerns, the gmail account name and app password has to be configured while testing.
 
 To enable email notifications:
