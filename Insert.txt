@@ -1,0 +1,16 @@
+insert into tblrole (rolename) VALUES ('Adminstrator');
+insert into tblrole (rolename) VALUES ('Student');
+insert into tblrole (rolename) VALUES ('Coordinator');
+insert into tblrole (rolename) VALUES ('Manager');
+insert into tblrole (rolename) VALUES ('Guest');
+
+insert into tblfaculty (facultyname,description) VALUES ('Computer Science','Desc');
+insert into tblfaculty (facultyname,description) VALUES ('Computing','-');
+insert into tblfaculty (facultyname,description) VALUES ('Information System','-');
+insert into tblfaculty (facultyname,description) VALUES ('Networking','-');
+
+insert into tbluser (username,roleid,facultyid,email,password_hash,created_at) VALUES ('admin',1,1,'admin@unimag.com','123','11/3/2026');
+
+insert into tblacademicyear (yearname,submission_closure_date,final_closure_date) VALUES ('2026','2026-03-20','2026-03-25');
+
+insert into tblcategory (categoryname,academicyearid,categorystartdate,categoryclosuredate) VALUES ('Thingyan Festival',1,'2026-03-11','2026-03-25');

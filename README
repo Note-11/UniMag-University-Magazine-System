@@ -1,0 +1,19 @@
+The system uses a .env file for email configuration. As per security concerns, the gmail account name and app password has to be configured while testing.
+
+To enable email notifications:
+
+1. Use a Gmail account
+
+Replace:
+MAIL_USERNAME=yourname@gmail.com
+MAIL_FROM=yourname@gmail.com
+with gmail account name
+
+2. Generate App Password
+   Go to Google Account → Security
+   Enable 2-Step Verification
+   Create App Password
+
+3. Then update:
+
+MAIL_PASSWORD=your_generated_app_password

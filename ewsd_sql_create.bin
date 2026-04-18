@@ -1,0 +1,110 @@
+CREATE DATABASE dbunimag;
+
+CREATE TABLE tblrole (
+    roleid INT AUTO_INCREMENT PRIMARY KEY,
+    rolename VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE tblfaculty (
+    facultyid INT AUTO_INCREMENT PRIMARY KEY,
+    facultyname VARCHAR(100) NOT NULL,
+    description VARCHAR(255)
+);
+
+CREATE TABLE tbluser (
+    userid INT AUTO_INCREMENT PRIMARY KEY,
+    facultyid INT,
+    roleid INT NOT NULL,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE tblacademicyear (
+    academicyearid INT AUTO_INCREMENT PRIMARY KEY,
+    yearname VARCHAR(50) NOT NULL,
+    submission_closure_date DATE NOT NULL,
+    final_closure_date DATE NOT NULL
+);
+CREATE TABLE tblcategory (
+    categoryid INT AUTO_INCREMENT PRIMARY KEY,
+    academicyearid INT NOT NULL,
+    categoryname VARCHAR(100) NOT NULL,
+    categorystartdate DATE NOT NULL,
+    categoryclosuredate DATE NOT NULL,
+    FOREIGN KEY (academicyearid) REFERENCES tblacademicyear(academicyearid)
+);
+CREATE TABLE tblcontribution (
+    contributionid INT AUTO_INCREMENT PRIMARY KEY,
+    studentid INT NOT NULL,
+    categoryid INT NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    submission_date DATE NOT NULL,
+    status ENUM('draft','submitted','selected','rejected') NOT NULL DEFAULT 'draft',
+    is_selected_for_publication BOOLEAN DEFAULT FALSE,
+    selected_by INT,
+    selecteddate DATE,
+    filepath1 VARCHAR(255),
+    filepath2 VARCHAR(255),
+    filepath3 VARCHAR(255),
+    FOREIGN KEY (studentid) REFERENCES tbluser(userid),
+    FOREIGN KEY (categoryid) REFERENCES tblcategory(categoryid),
+    FOREIGN KEY (selected_by) REFERENCES tbluser(userid)
+);
+CREATE TABLE tblcomment (
+    commentid INT AUTO_INCREMENT PRIMARY KEY,
+    contributionid INT NOT NULL,
+    coordinatorid INT NOT NULL,
+    comment_text TEXT NOT NULL,
+    comment_date DATE NOT NULL,
+    FOREIGN KEY (contributionid) REFERENCES tblcontribution(contributionid),
+    FOREIGN KEY (coordinatorid) REFERENCES tbluser(userid)
+);
+
+CREATE TABLE tblterms_and_conditions (
+    agreementid INT AUTO_INCREMENT PRIMARY KEY,
+    studentid INT NOT NULL,
+    academicyearid INT NOT NULL,
+    agreed_at DATE NOT NULL,
+    FOREIGN KEY (studentid) REFERENCES tbluser(userid),
+    FOREIGN KEY (academicyearid) REFERENCES tblacademicyear(academicyearid)
+);
+
+CREATE TABLE tblnotification_log (
+    notificationid INT AUTO_INCREMENT PRIMARY KEY,
+    contributionid INT NOT NULL,
+    sent_to INT NOT NULL,
+    sent_date DATE NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    FOREIGN KEY (contributionid) REFERENCES tblcontribution(contributionid),
+    FOREIGN KEY (sent_to) REFERENCES tbluser(userid)
+)
+//===========
+
+INSERT INTO tblfaculty (facultyname,description) VALUES ('Computer Science','Science');
+INSERT INTO tblfaculty (facultyname,description) VALUES ('Computing','developing');
+INSERT INTO tblfaculty (facultyname,description) VALUES ('Information System','System Management');
+INSERT INTO tblfaculty (facultyname,description) VALUES ('Networking','Cyber and Connecting');
+
+INSERT INTO tblrole (rolename) VALUES ('Adminstrator');
+INSERT INTO tblrole (rolename) VALUES ('Student');
+INSERT INTO tblrole (rolename) VALUES ('Marketing Coordinator');
+INSERT INTO tblrole (rolename) VALUES ('Marketing Manager');
+INSERT INTO tblrole (rolename) VALUES ('Guest'); 
+
+INSERT INTO `tbluser` (`userid`, `facultyid`, `roleid`, `username`, `email`, `password_hash`, `created_at`) VALUES
+(1, 1, 1, 'Administrator', 'admin@unimag.com', '$2y$10$n2fTzP1paCZZkQrrhSlYMOaosVhabQxnO1.qxOIrF.GToCiImTjMe', '2026-03-26 00:00:00'),
+(2, 1, 4, 'Aung Kaung Myat', 'akm@unimag.com', '$2y$10$po8R8Fvwyri6Iv0pciasUejojoZiiZ9eDyJDg1fQQDh3rzv2kj9IC', '2026-03-26 00:00:00'),
+(3, 1, 3, 'Phyu', 'phyu@unimag.com', '$2y$10$1VElz9bThjpzSATU7edObO6q6jZXe0IyhgMoI0qO1lLGfUf0eS3r.', '2026-03-26 00:00:00'),
+(4, 2, 3, 'Htar', 'htar@unimag.com', '$2y$10$jYwNGuLiHjHU.0b9b0Chd.Y2m6acAsz7LWM4oa2s5uGJdBfkOwPUC', '2026-03-26 00:00:00'),
+(5, 3, 3, 'Moe', 'moe@unimag.com', '$2y$10$qncu1Rlg5Aw8QO2LAH347.1BBdgD44Sj4xcXPZR5nFa/tiKUlWzQK', '2026-03-26 00:00:00'),
+(6, 4, 3, 'Wah', 'wah@unimag.com', '$2y$10$vS65QIZFUKCPJ0GQMwbJwO.23y6qMSuW3JPT65aEOuqlYsM6TZBci', '2026-03-26 00:00:00'),
+(7, 1, 2, 'Su Su', 'su@unimag.com', '$2y$10$BS3Ge.2cdoeC5YI7E4n.xurEEBzEHlPN/hXLxAU1nkAiNS4apczKq', '2026-03-26 00:00:00'),
+(8, 1, 2, 'Aye Aye', 'aye@unimag.com', '$2y$10$NUix/2kT6BA6uoRL1WzEjuRnZP.gnk7l22jC62lELE25ACuo1L5Ku', '2026-03-26 00:00:00'),
+(9, 2, 2, 'Kyaw', 'kyaw@unimag.com', '$2y$10$J5xoEekbZM36JNs42yyeb.I7w2MqAfubQss/RBjww19UWmqCleFki', '2026-03-26 00:00:00'),
+(10, 4, 2, 'Lin Lin', 'lin@unimag.cm', '$2y$10$ttamVUoaJYzOmRBey6VSFuBnN.ELNdzscKTQHcV.nQKPgXBKuKQoa', '2026-03-26 00:00:00');
+//===========
+ALTER TABLE tblcontribution 
+ADD updated_by INT,
+ADD updated_at DATETIME;

@@ -1,0 +1,15 @@
+body{
+    background: linear-gradient(135deg,#4e73df,#224abe);
+    height:100vh;
+}
+
+.login-card{
+    border-radius:15px;
+}
+
+.system-panel{
+    background:#224abe;
+    color:white;
+    border-top-left-radius:15px;
+    border-bottom-left-radius:15px;
+}
